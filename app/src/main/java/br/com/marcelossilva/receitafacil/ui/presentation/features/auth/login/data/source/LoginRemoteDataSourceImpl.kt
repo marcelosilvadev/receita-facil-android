@@ -8,33 +8,25 @@ import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.dat
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.model.AuthUserRequestModel
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.model.TokenResponseModel
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.source.LoginRemoteDataSource
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.RedirectResponseException
-import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.plugins.ResponseException
 import javax.inject.Inject
 
 class LoginRemoteDataSourceImpl @Inject constructor(
     private val recipesServiceApi: RecipesServiceApi
-): LoginRemoteDataSource {
+) : LoginRemoteDataSource {
     override suspend fun login(authUserRequestModel: AuthUserRequestModel): ServiceResult<TokenResponseModel> {
         return try {
             val authRequest = authUserRequestModel.toAuthRequest()
             val response = recipesServiceApi.login(authRequest)
-            if (response.isSuccessful){
+            if (response.isSuccessful) {
                 ServiceResult.Success(response.toTokenResponseModel())
             } else {
                 ServiceResult.Error(message = response.message)
             }
-        } catch (e: RedirectResponseException){
+        } catch (e: ResponseException) {
             ServiceResult.Error(e.response.status.value.toString(), e.response.status.description)
-        } catch (e: ClientRequestException){
-            ServiceResult.Error(e.response.status.value.toString(), e.response.status.description)
-        } catch (e: ServerResponseException){
-            ServiceResult.Error(e.response.status.value.toString(), e.response.status.description)
-        } catch (e: ErrorResponseException){
+        } catch (e: ErrorResponseException) {
             ServiceResult.Error(code = e.error.httpCode.toString(), message = e.error.message)
-        }catch (e: Exception){
-            ServiceResult.Error(message = e.message.toString())
         }
     }
 }

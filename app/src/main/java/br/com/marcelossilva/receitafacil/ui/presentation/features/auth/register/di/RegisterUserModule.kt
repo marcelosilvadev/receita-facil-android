@@ -30,28 +30,28 @@ object RegisterUserModule {
     @Provides
     @Singleton
     fun provideRegisterUserRepository(
-        registerUserRemoteDataSource: RegisterUserRemoteDataSource
-    ): RegisterUserRepository {
-        return RegisterUserRepositoryImpl(remoteDataSource = registerUserRemoteDataSource)
-    }
-
-    @Provides
-    @Singleton
-    fun provideRegisterUserUseCase(
-        registerUserRepository: RegisterUserRepository,
+        registerUserRemoteDataSource: RegisterUserRemoteDataSource,
         dispatcherProvider: DispatcherProvider
-    ): RegisterUserUseCase {
-        return RegisterUserUseCaseImpl(
-            registerUserRepository = registerUserRepository,
+    ): RegisterUserRepository {
+        return RegisterUserRepositoryImpl(
+            remoteDataSource = registerUserRemoteDataSource,
             dispatcherProvider = dispatcherProvider
         )
     }
 
     @Provides
     @Singleton
-    fun provideValidateRegisterInputUseCase(
+    fun provideRegisterUserUseCase(
         registerUserRepository: RegisterUserRepository,
-        dispatcherProvider: DispatcherProvider
+    ): RegisterUserUseCase {
+        return RegisterUserUseCaseImpl(
+            registerUserRepository = registerUserRepository
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideValidateRegisterInputUseCase(
     ): ValidateRegisterInputUseCaseImpl {
         return ValidateRegisterInputUseCaseImpl()
     }

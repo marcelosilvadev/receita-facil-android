@@ -4,6 +4,7 @@ import br.com.marcelossilva.receitafacil.BuildConfig
 import br.com.marcelossilva.receitafacil.core.data.remote.RecipesServiceApi
 import br.com.marcelossilva.receitafacil.core.data.remote.RecipesServiceApiImpl
 import com.google.gson.Gson
+import com.google.gson.Strictness
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,7 +29,7 @@ object KtorModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient{
+    fun provideHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
@@ -45,14 +46,16 @@ object KtorModule {
     @Singleton
     fun provideKtorHttpClient(
         okHttpClient: OkHttpClient,
-    ): HttpClient{
-        return HttpClient(OkHttp){
+    ): HttpClient {
+        return HttpClient(OkHttp) {
             engine {
                 preconfigured = okHttpClient
             }
             install(ContentNegotiation) {
                 gson {
-                    // Configurações do Gson, se necessário
+                    setStrictness(Strictness.LENIENT)
+                    setPrettyPrinting()
+                    serializeNulls()
                 }
             }
             install(WebSockets)

@@ -8,33 +8,25 @@ import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.register.
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.register.data.mapper.toSimpleResponseModel
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.register.domain.model.AddUserRequestModel
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.register.domain.source.RegisterUserRemoteDataSource
-import io.ktor.client.plugins.ClientRequestException
-import io.ktor.client.plugins.RedirectResponseException
-import io.ktor.client.plugins.ServerResponseException
+import io.ktor.client.plugins.ResponseException
 import javax.inject.Inject
 
 class RegisterUserRemoteDataSourceImpl @Inject constructor(
     private val recipesServiceApi: RecipesServiceApi
-): RegisterUserRemoteDataSource {
+) : RegisterUserRemoteDataSource {
     override suspend fun registerUser(addUserRequestModel: AddUserRequestModel): ServiceResult<SimpleResponseModel> {
         return try {
             val addUserRequest = addUserRequestModel.toAddUserRequest()
             val response = recipesServiceApi.register(addUserRequest)
-            if (response.isSuccessful){
+            if (response.isSuccessful) {
                 ServiceResult.Success(response.toSimpleResponseModel())
             } else {
                 ServiceResult.Error(message = response.message)
             }
-        } catch (e: RedirectResponseException){
+        } catch (e: ResponseException) {
             ServiceResult.Error(e.response.status.value.toString(), e.response.status.description)
-        } catch (e: ClientRequestException){
-            ServiceResult.Error(e.response.status.value.toString(), e.response.status.description)
-        } catch (e: ServerResponseException){
-            ServiceResult.Error(e.response.status.value.toString(), e.response.status.description)
-        } catch (e: ErrorResponseException){
+        } catch (e: ErrorResponseException) {
             ServiceResult.Error(code = e.error.httpCode.toString(), message = e.error.message)
-        }catch (e: Exception){
-            ServiceResult.Error(message = e.message.toString())
         }
     }
 }

@@ -39,9 +39,10 @@ object LoginModule {
     @Singleton
     fun provideLoginRepository(
         loginRemoteDataSource: LoginRemoteDataSource,
-        localDataSource: DataStoreLocalDataSource
+        localDataSource: DataStoreLocalDataSource,
+        dispatcherProvider: DispatcherProvider
     ): LoginRepository {
-        return LoginRepositoryImpl(loginRemoteDataSource, localDataSource)
+        return LoginRepositoryImpl(loginRemoteDataSource, localDataSource, dispatcherProvider)
     }
 
     @Provides
@@ -55,10 +56,9 @@ object LoginModule {
     @Provides
     @Singleton
     fun provideSaveUserDataUseCase(
-        loginRepository: LoginRepository,
-        dispatcherProvider: DispatcherProvider
+        loginRepository: LoginRepository
     ): SaveUserDataUseCase {
-        return SaveUserDataUseCaseImpl(loginRepository, dispatcherProvider)
+        return SaveUserDataUseCaseImpl(loginRepository)
     }
 
     @Provides
@@ -72,10 +72,9 @@ object LoginModule {
     @Provides
     @Singleton
     fun provideLoginUseCase(
-        dispatcherProvider: DispatcherProvider,
         loginRepository: LoginRepository
     ): LoginUseCase {
-        return LoginUseCaseImpl(dispatcherProvider, loginRepository)
+        return LoginUseCaseImpl(loginRepository)
     }
 
     @Provides

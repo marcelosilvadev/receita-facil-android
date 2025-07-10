@@ -24,7 +24,7 @@ import javax.inject.Inject
 class RegisterUserViewModel @Inject constructor(
     private val registerUserUseCase: RegisterUserUseCase,
     private val validateRegisterInputUseCase: ValidateRegisterInputUseCase
-): ViewModel(){
+) : ViewModel() {
     private val _uiState = MutableStateFlow(RegisterUserState())
     var uiState = _uiState.asStateFlow()
 
@@ -32,50 +32,51 @@ class RegisterUserViewModel @Inject constructor(
     //O Canal é Buffered, o que significa que pode armazenar múltiplos SideEffects
     //sem bloquear imediatamente quem envia
     private val _sideEffectChannel = Channel<SideEffect>(capacity = Channel.BUFFERED)
+
     //Expoe o canal como um Flow, permitindo que a UI "colecione" os efeitos colaterais
     //de forma reativa, usando o padrão do Kotlin Flow
     var sideEffectChannel = _sideEffectChannel.receiveAsFlow()
 
     fun onEvent(event: RegisterUserEvent) {
-        when(event){
+        when (event) {
             is RegisterUserEvent.OnRegisterClick -> onRegisterClick()
         }
     }
 
     fun onNameInputChange(newValue: String) {
-        _uiState.update{ it.copy(nameValue = newValue)}
+        _uiState.update { it.copy(nameValue = newValue) }
         checkedInputValidation()
     }
 
     fun onEmailInputChange(newValue: String) {
-        _uiState.update{ it.copy(emailValue = newValue)}
+        _uiState.update { it.copy(emailValue = newValue) }
         checkedInputValidation()
     }
 
     fun onPhoneNumberInputChange(newValue: String) {
-        _uiState.update{ it.copy(phoneNumberValue = newValue)}
+        _uiState.update { it.copy(phoneNumberValue = newValue) }
         checkedInputValidation()
     }
 
     fun onPasswordInputChange(newValue: String) {
-        _uiState.update{ it.copy(passwordValue = newValue)}
+        _uiState.update { it.copy(passwordValue = newValue) }
         checkedInputValidation()
     }
 
     fun onConfirmPasswordInputChange(newValue: String) {
-        _uiState.update{ it.copy(confirmPasswordValue = newValue)}
+        _uiState.update { it.copy(confirmPasswordValue = newValue) }
         checkedInputValidation()
     }
 
     fun onToggleShowPassword() {
-        _uiState.update{ it.copy(isPasswordShow = !it.isPasswordShow)}
+        _uiState.update { it.copy(isPasswordShow = !it.isPasswordShow) }
     }
 
     fun onToggleShowConfirmPassword() {
-        _uiState.update{ it.copy(isConfirmPasswordShow = !it.isConfirmPasswordShow)}
+        _uiState.update { it.copy(isConfirmPasswordShow = !it.isConfirmPasswordShow) }
     }
 
-    private fun checkedInputValidation(){
+    private fun checkedInputValidation() {
         val validationResult = validateRegisterInputUseCase(
             name = _uiState.value.nameValue,
             email = _uiState.value.emailValue,
@@ -86,15 +87,15 @@ class RegisterUserViewModel @Inject constructor(
         processInputValidationType(validationResult)
     }
 
-    private fun onRegisterClick(){
+    private fun onRegisterClick() {
         viewModelScope.launch {
             registerUserUseCase.invoke(
                 parameters = RegisterUserUseCase.Parameters(
                     AddUserRequestModel(
-                        name = _uiState.value.nameValue,
-                        email = _uiState.value.emailValue,
+                        name = _uiState.value.nameValue.trim(),
+                        email = _uiState.value.emailValue.trim(),
                         phone = _uiState.value.phoneNumberValue.toFormattedPhoneNumber(),
-                        password = _uiState.value.passwordValue,
+                        password = _uiState.value.passwordValue.trim(),
                     )
                 )
             ).observeState(
@@ -124,55 +125,63 @@ class RegisterUserViewModel @Inject constructor(
 
     private fun processInputValidationType(type: RegisterInputValidationType) {
         _uiState.update {
-            when(type){
+            when (type) {
                 RegisterInputValidationType.EmptyField -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.EMPTY_FIELD
                     )
                 }
+
                 RegisterInputValidationType.NoEmail -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.INVALID_EMAIL
                     )
                 }
+
                 RegisterInputValidationType.PasswordTooShort -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.PASSWORD_TOO_SHORT
                     )
                 }
+
                 RegisterInputValidationType.PasswordsDoNotMatch -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.PASSWORDS_DO_NOT_MATCH
                     )
                 }
+
                 RegisterInputValidationType.PasswordSpecialCharMissing -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.PASSWORD_SPECIAL_CHAR_MISSING
                     )
                 }
+
                 RegisterInputValidationType.PasswordNumberMissing -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.PASSWORD_NUMBER_MISSING
                     )
                 }
+
                 RegisterInputValidationType.PasswordUpperCaseMissing -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.PASSWORD_UPPERCASE_MISSING
                     )
                 }
+
                 RegisterInputValidationType.PhoneNumberInvalid -> {
                     it.copy(
                         isInputValid = false,
                         errorMessageInput = Constants.ValidationAuthMessages.PHONE_NUMBER_INVALID
                     )
                 }
+
                 RegisterInputValidationType.Valid -> {
                     it.copy(
                         isInputValid = true,
