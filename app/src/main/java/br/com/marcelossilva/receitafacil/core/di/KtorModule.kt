@@ -1,6 +1,7 @@
 package br.com.marcelossilva.receitafacil.core.di
 
 import br.com.marcelossilva.receitafacil.BuildConfig
+import br.com.marcelossilva.receitafacil.core.data.remote.AccessTokenInterceptor
 import br.com.marcelossilva.receitafacil.core.data.remote.RecipesServiceApi
 import br.com.marcelossilva.receitafacil.core.data.remote.RecipesServiceApiImpl
 import com.google.gson.Gson
@@ -29,7 +30,7 @@ object KtorModule {
 
     @Provides
     @Singleton
-    fun provideHttpClient(): OkHttpClient {
+    fun provideOkHttpClient(): OkHttpClient {
         return OkHttpClient.Builder()
             .readTimeout(1, TimeUnit.MINUTES)
             .writeTimeout(1, TimeUnit.MINUTES)
@@ -44,12 +45,16 @@ object KtorModule {
 
     @Provides
     @Singleton
-    fun provideKtorHttpClient(
+    fun provideHttpClient(
         okHttpClient: OkHttpClient,
+        accessTokenInterceptor: AccessTokenInterceptor
     ): HttpClient {
         return HttpClient(OkHttp) {
             engine {
                 preconfigured = okHttpClient
+                config {
+                    addInterceptor(accessTokenInterceptor)
+                }
             }
             install(ContentNegotiation) {
                 gson {
