@@ -25,6 +25,7 @@ fun LoginScreen(
     SingleEventEffect(sideEffectFlow) { sideEffect ->
         when(sideEffect){
             is SideEffect.ShowToast -> context.toast(sideEffect.message)
+            is SideEffect.ShowSnackBar -> context.toast(sideEffect.message)
             else -> {}
         }
     }

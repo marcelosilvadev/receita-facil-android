@@ -72,6 +72,7 @@ fun LoginContent(
                     modifier = Modifier.fillMaxWidth(),
                     text = uiState.errorMessageLoginProcess ?: uiState.errorMessageInput.orEmpty(),
                     fontFamily = poppinsFontFamily,
+                    fontSize = 14.sp,
                     fontWeight = FontWeight.SemiBold,
                     color = MaterialTheme.colorScheme.error,
                     textAlign = TextAlign.Center

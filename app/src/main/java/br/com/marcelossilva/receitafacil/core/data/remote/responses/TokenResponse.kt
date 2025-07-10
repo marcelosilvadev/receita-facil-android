@@ -8,7 +8,7 @@ data class TokenResponse(
     @SerializedName("message")
     val message: String,
     @SerializedName("token")
-    val token: Boolean,
+    val token: String,
     @SerializedName("userName")
     val userName: String,
 )

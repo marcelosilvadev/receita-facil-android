@@ -24,7 +24,8 @@ class RegisterUserUseCaseImpl @Inject constructor(
     override suspend fun executeTask(parameters: RegisterUserUseCase.Parameters): ResponseData<SimpleResponseModel> {
         return try{
             withContext(dispatcherProvider.io()){
-                when(val response = registerUserRepository.registerUser(parameters.addUserRequestModel)) {
+                val response = registerUserRepository.registerUser(parameters.addUserRequestModel)
+                when(response) {
                     is ServiceResult.Success -> ResponseData.Success(response.data)
                     is ServiceResult.Error -> ResponseData.Error(Throwable(response.message))
                 }
