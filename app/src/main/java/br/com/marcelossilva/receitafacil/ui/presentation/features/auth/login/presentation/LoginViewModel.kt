@@ -8,6 +8,7 @@ import br.com.marcelossilva.receitafacil.core.util.extensions.observeState
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.model.AuthUserRequestModel
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.model.LoginInputValidationType
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.usecase.LoginUseCase
+import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.usecase.SaveUserDataUseCase
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.domain.usecase.ValidateLoginInputUseCase
 import br.com.marcelossilva.receitafacil.ui.presentation.features.auth.login.presentation.state.LoginUiState
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -22,7 +23,8 @@ import javax.inject.Inject
 @HiltViewModel
 class LoginViewModel @Inject constructor(
     val validateLoginInputUseCase: ValidateLoginInputUseCase,
-    val loginUseCase: LoginUseCase,
+    private val loginUseCase: LoginUseCase,
+    private val saveUserDataUseCase: SaveUserDataUseCase
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(LoginUiState());
@@ -57,8 +59,8 @@ class LoginViewModel @Inject constructor(
             loginUseCase.invoke(
                 parameters = LoginUseCase.Parameters(
                     authUserRequestModel = AuthUserRequestModel(
-                        email = _uiState.value.emailValue,
-                        password = _uiState.value.passwordValue
+                        email = _uiState.value.emailValue.trim(),
+                        password = _uiState.value.passwordValue.trim()
                     )
                 )
             ).observeState(
@@ -71,6 +73,10 @@ class LoginViewModel @Inject constructor(
                         SideEffect.ShowToast(
                             message = response.message.toString()
                         )
+                    )
+                    saveLocalStorageUserData(
+                        response.token.toString(),
+                        response.userName.toString()
                     )
                 },
                 onFailure = { error ->
@@ -117,5 +123,16 @@ class LoginViewModel @Inject constructor(
         }
     }
 
-    private fun saveLocalStorageData(token: String, userName: String) {}
+    private suspend fun saveLocalStorageUserData(token: String, userName: String) {
+        saveUserDataUseCase.invoke(
+            SaveUserDataUseCase.Parameters(
+                token = token,
+                userName = userName
+            )
+        ).observeState(
+            onLoading = {/* No-op */ },
+            onSuccess = {/* No-op */ },
+            onFailure = {/* No-op */ }
+        )
+    }
 }
