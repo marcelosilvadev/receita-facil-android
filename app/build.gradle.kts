@@ -16,7 +16,7 @@ apiKeyProperties.load(FileInputStream(apiKeyPropertiesFile))
 
 android {
     namespace = "br.com.marcelossilva.receitafacil"
-    compileSdk = 34
+    compileSdk = 35
 
     defaultConfig {
         applicationId = "br.com.marcelossilva.receitafacil"
@@ -31,7 +31,11 @@ android {
         //testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
 
         buildConfigField("String", "BASE_URL", apiKeyProperties.getProperty("BASE_URL"))
-        buildConfigField("String", "BASE_WEBSOCKET_CONNECTION", apiKeyProperties.getProperty("BASE_WEBSOCKET_CONNECTION"))
+        buildConfigField(
+            "String",
+            "BASE_WEBSOCKET_CONNECTION",
+            apiKeyProperties.getProperty("BASE_WEBSOCKET_CONNECTION")
+        )
 
         vectorDrawables {
             useSupportLibrary = true
@@ -41,18 +45,21 @@ android {
     buildTypes {
         release {
             isMinifyEnabled = false
-            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_21
+        targetCompatibility = JavaVersion.VERSION_21
     }
     kotlin {
-        jvmToolchain(17)
+        jvmToolchain(21)
     }
     kotlinOptions {
-        jvmTarget = "17"
+        jvmTarget = "21"
     }
     buildFeatures {
         compose = true
