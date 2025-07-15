@@ -6,10 +6,10 @@ import kotlinx.serialization.Serializable
 sealed interface Graphs {
 
     @Serializable
-    data object AuthGraph: Graphs
+    data object AuthGraph : Graphs
 
     @Serializable
-    data object HomeGraph: Graphs
+    data object HomeGraph : Graphs
 
 }
 
@@ -17,10 +17,10 @@ sealed interface Graphs {
 sealed interface AuthScreens {
 
     @Serializable
-    data object LoginScreen: AuthScreens
+    data object LoginScreen : AuthScreens
 
     @Serializable
-    data object RegisterScreen: AuthScreens
+    data object RegisterScreen : AuthScreens
 
 }
 
@@ -28,31 +28,31 @@ sealed interface AuthScreens {
 sealed interface HomeScreens {
 
     @Serializable
-    data class WebSocketUpdateScreen(val qrCode: String?): HomeScreens
+    data class WebSocketUpdateScreen(val qrCode: String?) : HomeScreens
 
     @Serializable
-    data class RecipeDetailScreen(val recipeId: String): HomeScreens
+    data class RecipeDetailScreen(val recipeId: String) : HomeScreens
 
     @Serializable
-    data class AddRecipeScreen(val recipeId: String? = ""): HomeScreens
+    data class AddRecipeScreen(val recipeId: String? = "") : HomeScreens
 
     @Serializable
-    data object HomeScreen: HomeScreens
+    data object ListRecipesScreen : HomeScreens
 
     @Serializable
-    data object ProfileScreen: HomeScreens
+    data object ProfileScreen : HomeScreens
 
     @Serializable
-    data object CreateQrCodeScreen: HomeScreens
+    data object CreateQrCodeScreen : HomeScreens
 
     @Serializable
-    data object ReadQrCodeScreen: HomeScreens
+    data object ReadQrCodeScreen : HomeScreens
 
     @Serializable
-    data object UserConnectionsQrCodeScreen: HomeScreens
+    data object UserConnectionsQrCodeScreen : HomeScreens
 
     @Serializable
-    data object SearchScreen: HomeScreens
+    data object SearchScreen : HomeScreens
 
 }
 
