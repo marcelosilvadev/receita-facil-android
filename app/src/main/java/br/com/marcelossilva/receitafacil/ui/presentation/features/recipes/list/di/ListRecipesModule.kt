@@ -6,6 +6,8 @@ import br.com.marcelossilva.receitafacil.ui.presentation.features.recipes.list.d
 import br.com.marcelossilva.receitafacil.ui.presentation.features.recipes.list.data.source.GetRecipesByUserRemoteDataSourceImpl
 import br.com.marcelossilva.receitafacil.ui.presentation.features.recipes.list.domain.repository.GetRecipesByUserRepository
 import br.com.marcelossilva.receitafacil.ui.presentation.features.recipes.list.domain.source.GetRecipesByUserRemoteDataSource
+import br.com.marcelossilva.receitafacil.ui.presentation.features.recipes.list.domain.usecase.GetRecipesByUserUseCase
+import br.com.marcelossilva.receitafacil.ui.presentation.features.recipes.list.domain.usecase.GetRecipesByUserUseCaseImpl
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -31,5 +33,13 @@ object ListRecipesModule {
         dispatcherProvider: DispatcherProvider
     ): GetRecipesByUserRepository {
         return GetRecipesByUserRepositoryImpl(remoteDataSource, dispatcherProvider)
+    }
+
+    @Provides
+    @Singleton
+    fun provideGetRecipesByUserUseCase(
+        getRecipesByUserRepository: GetRecipesByUserRepository
+    ): GetRecipesByUserUseCase {
+        return GetRecipesByUserUseCaseImpl(getRecipesByUserRepository)
     }
 }
