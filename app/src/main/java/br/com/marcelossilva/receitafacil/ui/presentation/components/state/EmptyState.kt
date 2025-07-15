@@ -31,7 +31,7 @@ fun EmptyState(
     modifier: Modifier = Modifier,
     image: Painter,
     title: String,
-    subtitle: @Composable () -> Unit,
+    subtitle: @Composable () -> Unit = {},
 ) {
     Box(
         modifier = modifier
