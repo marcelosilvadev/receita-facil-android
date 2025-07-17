@@ -105,8 +105,8 @@ class RegisterUserViewModel @Inject constructor(
                 onSuccess = { response ->
                     _uiState.update {
                         it.copy(
-                            isLoading = false,
                             isSuccess = response.isSuccessful,
+                            isLoading = false,
                         )
                     }
                     _sideEffectChannel.send(SideEffect.ShowToast(response.message))
