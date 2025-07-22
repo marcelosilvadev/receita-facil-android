@@ -21,17 +21,17 @@ enum class CategoryEnum(
 
     Dessert(
         value = 2,
-        description = "Almoço",
+        description = "Sobremesa",
         iconRes = R.drawable.ic_icecream
     ),
     Snack(
         value = 3,
-        description = "Almoço",
+        description = "Lanche",
         iconRes = R.drawable.ic_fastfood
     ),
     Dinner(
         value = 4,
-        description = "Almoço",
+        description = "Jantar",
         iconRes = R.drawable.ic_dinner_dining
     );
 

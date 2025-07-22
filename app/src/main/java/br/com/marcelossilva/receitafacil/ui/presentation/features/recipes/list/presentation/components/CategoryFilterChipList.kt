@@ -20,7 +20,7 @@ fun CategoryFilterChipList(
     LazyRow(
         modifier = modifier,
         contentPadding = PaddingValues(horizontal = 24.dp),
-        horizontalArrangement = Arrangement.spacedBy(8.dp)
+        horizontalArrangement = Arrangement.spacedBy(8.dp),
     ) {
         items(items = categories) { category ->
             CategoryFilterChip(

@@ -15,7 +15,7 @@ import br.com.marcelossilva.receitafacil.ui.presentation.components.state.Loadin
 import br.com.marcelossilva.receitafacil.ui.theme.ReceitaFacilAppTheme
 
 @Composable
-fun ListRecipeContent(
+fun RecipesContent(
     modifier: Modifier = Modifier,
     isEmpty: Boolean,
     isLoading: Boolean,
@@ -71,7 +71,7 @@ fun ListRecipeContent(
 @Composable
 private fun ListRecipeContentPreview() {
     ReceitaFacilAppTheme {
-        ListRecipeContent(
+        RecipesContent(
             modifier = Modifier,
             isEmpty = false,
             isLoading = false,
@@ -97,7 +97,7 @@ private fun ListRecipeContentPreview() {
 @Composable
 private fun ListRecipeContentLoadingPreview() {
     ReceitaFacilAppTheme {
-        ListRecipeContent(
+        RecipesContent(
             modifier = Modifier,
             isEmpty = false,
             isLoading = true,
@@ -114,7 +114,7 @@ private fun ListRecipeContentLoadingPreview() {
 @Composable
 private fun ListRecipeContentErrorPreview() {
     ReceitaFacilAppTheme {
-        ListRecipeContent(
+        RecipesContent(
             modifier = Modifier,
             isEmpty = false,
             isLoading = false,
@@ -131,7 +131,7 @@ private fun ListRecipeContentErrorPreview() {
 @Composable
 private fun ListRecipeContentEmptyPreview() {
     ReceitaFacilAppTheme {
-        ListRecipeContent(
+        RecipesContent(
             modifier = Modifier,
             isEmpty = true,
             isLoading = false,
