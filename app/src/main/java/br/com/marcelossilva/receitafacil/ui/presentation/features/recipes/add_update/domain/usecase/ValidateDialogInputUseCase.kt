@@ -13,7 +13,7 @@ interface ValidateDialogInputUseCase {
 class ValidateDialogInputUseCaseImpl : ValidateDialogInputUseCase {
     override fun invoke(parameters: ValidateDialogInputUseCase.Parameters): AddUpdateRecipeInputValidationType {
         return if (parameters.ingredientProductName.isEmpty() || parameters.ingredientProductAmount.isEmpty()) {
-            AddUpdateRecipeInputValidationType.EmptyField
+            AddUpdateRecipeInputValidationType.EmptyDialogField
         } else {
             AddUpdateRecipeInputValidationType.Valid
         }
